@@ -8,7 +8,7 @@
 ?>
 <form method="POST" action="<?= $form->encode($_SERVER['PHP_SELF']) ?>">
     <table>
-        <?php if ($errors) { ?>//errors
+        <?php if ($errors) { //errors ?>
         <tr>
             <td>You need to correct the following errors:</td>
             <td><ul>

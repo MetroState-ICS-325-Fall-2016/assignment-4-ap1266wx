@@ -25,7 +25,7 @@ $main_dishes = array('pizza'=> 'Cheese Pizza',
     'taro' => 'Stewed Pork with Taro',
     'giblets' => 'Baked Giblets with Salt',
     'abalone' => 'Abalone with Marrow and Duck Feet');
-$drink = array('soda' => 'Coke',
+$drinks = array('soda' => 'Coke',
     'diet soda'=> 'Diet Coke',
     'sprite soda' => 'Sprite',
     'skim'=>'Milk',
@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 function show_form($errors = array()) {
     $defaults = array('delivery' => 'yes',
-        'size'     => 'Large');
+        'size'     => 'large');
     // Set up the $form object with proper defaults
     $form = new FormHelper($defaults);
     // All the HTML and form display is in a separate file for clarity
@@ -103,7 +103,7 @@ function validate_form( ) {
     } else {
         $input['drink'] = '';
     }
-    if (! array_key_exists($input['drink'], $GLOBALS['drink'])) {
+    if (! array_key_exists($input['drink'], $GLOBALS['drinks'])) {
         $errors[] = 'Please select a valid drink item.';
     }
 
@@ -143,7 +143,7 @@ function process_form($input) {
     // look up the full names of the sweet and the main dishes in
     // the $GLOBALS['sweets'] and $GLOBALS['main_dishes'] arrays
 
-    $drink = $GLOBALS['drink'][ $input['drink'] ];
+    $drink = $GLOBALS['drinks'][ $input['drink'] ];
     $sweet = $GLOBALS['sweets'][ $input['sweet'] ];
     $main_dish_1 = $GLOBALS['main_dishes'][ $input['main_dish'][0] ];
     $main_dish_2 = $GLOBALS['main_dishes'][ $input['main_dish'][1] ];
