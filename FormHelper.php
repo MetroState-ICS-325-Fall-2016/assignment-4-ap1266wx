@@ -1,7 +1,15 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: john
+ * Date: 9/20/2016
+ * Time: 8:10 PM
+ */
+?>
+
+<?php
 class FormHelper {
     protected $values = array();
-
     public function __construct($values = array()) {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->values = $_POST;
@@ -9,7 +17,6 @@ class FormHelper {
             $this->values = $values;
         }
     }
-
     public function input($type, $attributes = array(), $isMultiple = false) {
         $attributes['type'] = $type;
         if (($type == 'radio') || ($type == 'checkbox')) {
@@ -20,20 +27,18 @@ class FormHelper {
                 $attributes['value'] = null;
             }
             if ($this->isOptionSelected($attributes['name'],
-                                        $attributes['value'])) {
+                $attributes['value'])) {
                 $attributes['checked'] = true;
             }
         }
         return $this->tag('input', $attributes, $isMultiple);
     }
-
     public function select($options, $attributes = array()) {
         if (isset($attributes['multiple'])) {
             $multiple = $attributes['multiple'];
         } else {
             $multiple = false;
         }
-
         if (!isset($attributes['name'])) {
             $attributes['name'] = null;
         }
@@ -42,7 +47,6 @@ class FormHelper {
             $this->options($attributes['name'], $options) .
             $this->end('select');
     }
-
     public function textarea($attributes = array()) {
         if (!isset($attributes['name'])) {
             $attributes['name'] = null;
@@ -54,10 +58,9 @@ class FormHelper {
             $value = '';
         }
         return $this->start('textarea', $attributes) .
-               htmlentities($value) .
-               $this->end('textarea');
+        htmlentities($value) .
+        $this->end('textarea');
     }
-
     public function tag($tag, $attributes = array(), $isMultiple = false) {
         if ($attributes['type'] === 'radio') {
             $valueAttribute = false;
@@ -75,7 +78,6 @@ class FormHelper {
     public function end($tag) {
         return "</$tag>";
     }
-
     protected function attributes($attributes, $isMultiple,
                                   $valueAttribute = true) {
         $tmp = array();
@@ -104,7 +106,6 @@ class FormHelper {
         }
         return implode(' ', $tmp);
     }
-
     protected function options($name, $options) {
         $tmp = array();
         foreach ($options as $k => $v) {
@@ -117,7 +118,6 @@ class FormHelper {
         }
         return implode('', $tmp);
     }
-
     protected function isOptionSelected($name, $value) {
         // If there's no entry for $name in the values array,
         // then this option can't be selected
@@ -135,7 +135,6 @@ class FormHelper {
             return $value == $this->values[$name];
         }
     }
-
     public function encode($s) {
         return htmlentities($s);
     }

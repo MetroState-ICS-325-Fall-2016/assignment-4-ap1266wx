@@ -1,42 +1,57 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: john
+ * Date: 9/20/2016
+ * Time: 8:08 PM
+ */
+?>
 <form method="POST" action="<?= $form->encode($_SERVER['PHP_SELF']) ?>">
-<table>
-    <?php if ($errors) { ?>
+    <table>
+        <?php if ($errors) { ?>//errors
         <tr>
             <td>You need to correct the following errors:</td>
             <td><ul>
-                <?php foreach ($errors as $error) { ?>
-                    <li><?= $form->encode($error) ?></li>
-                <?php } ?>
-            </ul></td>
-    <?php }  ?>
+                    <?php foreach ($errors as $error) { ?>
+                        <li><?= $form->encode($error) ?></li>
+                    <?php } ?>
+                </ul></td>
+            <?php }  ?>
 
-    <tr><td>Your Name:</td><td><?= $form->input('text', ['name' => 'name']) ?></td></tr>
+        <tr><td>Your Name:</td><td><?= $form->input('text', ['name' => 'name']) ?></td></tr>
 
-    <tr><td>Size:</td>
-        <td><?= $form->input('radio',['name' => 'size', 'value' => 'small']) ?> Small <br/>
-            <?= $form->input('radio',['name' => 'size', 'value' => 'medium']) ?> Medium <br/>
-            <?= $form->input('radio',['name' => 'size', 'value' => 'large']) ?> Large <br/>
-        </td></tr>
+        <tr><td>Size:</td>
+            <td><?= $form->input('radio',['name' => 'size', 'value' => 'small']) ?> Small <br/>
+                <?= $form->input('radio',['name' => 'size', 'value' => 'medium']) ?> Medium <br/>
+                <?= $form->input('radio',['name' => 'size', 'value' => 'large']) ?> Large <br/>
+                <?= $form->input('radio',['name' => 'size', 'value' => 'XLarge']) ?> XLarge <br/>
 
-    <tr><td>Pick one sweet item:</td>
-        <td><?= $form->select($GLOBALS['sweets'], ['name' => 'sweet']) ?></td>
-    </tr>
+            </td></tr>
+        <tr><td>Pick one drink item:</td>
+            <td><?= $form->select($GLOBALS['drinks'], ['name' => 'drink']) ?></td>
+        </tr>
 
-    <tr><td>Pick two main dishes:</td>
-        <td><?= $form->select($GLOBALS['main_dishes'], ['name' => 'main_dish',
-                                                        'multiple' => true]) ?></td>
-    </tr>
 
-    <tr><td>Do you want your order delivered?</td>
-        <td><?= $form->input('checkbox',['name' => 'delivery', 'value' => 'yes']) ?> Yes
-        </td></tr>
+        <tr><td>Pick one sweet item:</td>
+            <td><?= $form->select($GLOBALS['sweets'], ['name' => 'sweet']) ?></td>
+        </tr>
 
-    <tr><td>Enter any special instructions.<br/>
-        If you want your order delivered, put your address here:</td>
-        <td><?= $form->textarea(['name' => 'comments']) ?></td></tr>
+        <tr><td>Pick two main dishes:</td>
+            <td><?= $form->select($GLOBALS['main_dishes'], ['name' => 'main_dish',
+                    'multiple' => true]) ?></td>
+        </tr>
 
-    <tr><td colspan="2" align="center"><?= $form->input('submit', ['value' => 'Order']) ?>
-    </td></tr>
+        <tr><td>Do you want your order delivered?</td>
+            <td><?= $form->input('checkbox',['name' => 'delivery', 'value' => 'yes']) ?> Yes
+            </td></tr>
 
-</table>
+        <tr><td>Enter any special instructions.<br/>
+                If you want your order delivered, put your address here:</td>
+            <td><?= $form->textarea(['name' => 'comments']) ?></td></tr>
+
+        <tr><td colspan="2" align="center"><?= $form->input('submit', ['value' => 'Order']) ?>
+        <tr><td colspan="2" align="center"><?= $form->input ('reset', ['button' => 'reset']) ?>
+            </td></tr>
+
+    </table>
 </form>

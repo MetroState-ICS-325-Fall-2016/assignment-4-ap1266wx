@@ -1,24 +1,35 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: john
+ * Date: 9/20/2016
+ * Time: 8:06 PM
+ */
+?>
+<?php
 // This assumes FormHelper.php is in the same directory as
 // this file.
 require 'FormHelper.php';
-
 // setup the arrays of choices in the select menus
 // these are needed in display_form( ), validate_form( ),
 // and process_form( ), so they are declared in the global scope
-$sweets = array('puff' => 'Sesame Seed Puff',
-                'square' => 'Coconut Milk Gelatin Square',
-                'cake' => 'Brown Sugar Cake',
-                'ricemeat' => 'Sweet Rice and Meat');
-
-$main_dishes = array('cuke' => 'Braised Sea Cucumber',
-                     'stomach' => "Sauteed Pig's Stomach",
-                     'tripe' => 'Sauteed Tripe with Wine Sauce',
-                     'taro' => 'Stewed Pork with Taro',
-                     'giblets' => 'Baked Giblets with Salt',
-                     'abalone' => 'Abalone with Marrow and Duck Feet');
-
+$sweets = array('Ice Cream' => 'Cookie dough Ice Cream',
+    'puff' => 'Sesame Seed Puff',
+    'square' => 'Coconut Milk Gelatin Square',
+    'cake' => 'Brown Sugar Cake',
+    'ricemeat' => 'Sweet Rice and Meat');
+$main_dishes = array('pizza'=> 'Cheese Pizza',
+    'cuke' => 'Braised Sea Cucumber',
+    'stomach' => "Sauteed Pig's Stomach",
+    'tripe' => 'Sauteed Tripe with Wine Sauce',
+    'taro' => 'Stewed Pork with Taro',
+    'giblets' => 'Baked Giblets with Salt',
+    'abalone' => 'Abalone with Marrow and Duck Feet');
+$drink = array('soda' => 'Coke',
+    'diet soda'=> 'Diet Coke',
+    'sprite soda' => 'Sprite',
+    'skim'=>'Milk',
+    'h2o'=>'water');
 // The main page logic:
 // - If the form is submitted, validate and then process or redisplay
 // - If it's not submitted, display
@@ -35,21 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // The form wasn't submitted, so display
     show_form();
 }
-
 function show_form($errors = array()) {
     $defaults = array('delivery' => 'yes',
-                      'size'     => 'medium');
+        'size'     => 'Large');
     // Set up the $form object with proper defaults
     $form = new FormHelper($defaults);
-
     // All the HTML and form display is in a separate file for clarity
     include 'complete-form.php';
 }
-
 function validate_form( ) {
     $input = array();
     $errors = array( );
-
     // name is required
     if (isset($_POST['name'])) {
         $input['name'] = trim($_POST['name']);
@@ -59,13 +66,25 @@ function validate_form( ) {
     if (! strlen($input['name'])) {
         $errors[] = 'Please enter your name.';
     }
+
+    //begin email
+    if (isset($_POST['email'])) {
+        $input['email'] = trim($_POST['email']);
+    } else {
+        $input['email'] = '';
+    }
+    if (! strlen($input['email'])) {
+        $errors[] = 'Please enter your email.';
+    }
+    // end email
+
     // size is required
     if(isset($_POST['size'])) {
         $input['size'] = trim($_POST['size']);
     } else {
         $input['size'] = '';
     }
-    if (! in_array($input['size'], ['small','medium','large'])) {
+    if (! in_array($input['size'], ['small','medium','large','XLarge'])) {
         $errors[] = 'Please select a size.';
     }
     // sweet is required
@@ -77,6 +96,17 @@ function validate_form( ) {
     if (! array_key_exists($input['sweet'], $GLOBALS['sweets'])) {
         $errors[] = 'Please select a valid sweet item.';
     }
+
+    // drink is required
+    if (isset($_POST['drink'])) {
+        $input['drink'] = $_POST['drink'];
+    } else {
+        $input['drink'] = '';
+    }
+    if (! array_key_exists($input['drink'], $GLOBALS['drink'])) {
+        $errors[] = 'Please select a valid drink item.';
+    }
+
     // exactly two main dishes required
     if (isset($_POST['main_dish'])) {
         $input['main_dish'] = $_POST['main_dish'];
@@ -89,7 +119,7 @@ function validate_form( ) {
         // We know there are two main dishes selected, so make sure they are
         // both valid
         if (! (array_key_exists($input['main_dish'][0], $GLOBALS['main_dishes']) &&
-               array_key_exists($input['main_dish'][1], $GLOBALS['main_dishes']))) {
+            array_key_exists($input['main_dish'][1], $GLOBALS['main_dishes']))) {
             $errors[] = 'Please select exactly two valid main dishes.';
         }
     }
@@ -107,13 +137,13 @@ function validate_form( ) {
     if (($input['delivery'] == 'yes') && (! strlen($input['comments']))) {
         $errors[] = 'Please enter your address for delivery.';
     }
-
     return array($errors, $input);
 }
-
 function process_form($input) {
     // look up the full names of the sweet and the main dishes in
     // the $GLOBALS['sweets'] and $GLOBALS['main_dishes'] arrays
+
+    $drink = $GLOBALS['drink'][ $input['drink'] ];
     $sweet = $GLOBALS['sweets'][ $input['sweet'] ];
     $main_dish_1 = $GLOBALS['main_dishes'][ $input['main_dish'][0] ];
     $main_dish_2 = $GLOBALS['main_dishes'][ $input['main_dish'][1] ];
@@ -124,19 +154,17 @@ function process_form($input) {
     }
     // build up the text of the order message
     $message=<<<_ORDER_
-Thank you for your order, {$input['name']}.
+Thank you for your order, {$input['name']} at{$input['email']}.
 You requested the {$input['size']} size of $sweet, $main_dish_1, and $main_dish_2.
+You would like a $drink to drink.
 You $delivery want delivery.\n
 _ORDER_;
     if (strlen(trim($input['comments']))) {
         $message .= 'Your comments: '.$input['comments'];
     }
-
     // send the message to the chef (don't actually try to send it, uncomment for production):
     # mail('chef@restaurant.example.com', 'New Order', $message);
-
     // print the message, but encode any HTML entities
     // and turn newlines into <br/> tags
     print str_replace('&NewLine;', "<br />\n", htmlentities($message, ENT_HTML5));
 }
-
