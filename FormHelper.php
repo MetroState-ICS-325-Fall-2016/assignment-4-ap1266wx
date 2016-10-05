@@ -75,6 +75,7 @@ class FormHelper {
         $attrs = $this->attributes($attributes, $isMultiple, $valueAttribute);
         return "<$tag $attrs>";
     }
+
     public function end($tag) {
         return "</$tag>";
     }

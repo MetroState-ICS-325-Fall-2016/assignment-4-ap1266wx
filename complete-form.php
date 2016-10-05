@@ -21,7 +21,6 @@
         <tr><td>Your Name:</td><td><?= $form->input('text', ['name' => 'name']) ?></td></tr>
         <tr><td>Email:</td><td><?= $form->input('text', ['name' => 'email']) ?></td></tr>
 
-
         <tr><td>Size:</td>
             <td><?= $form->input('radio',['name' => 'size', 'value' => 'small']) ?> Small <br/>
                 <?= $form->input('radio',['name' => 'size', 'value' => 'medium']) ?> Medium <br/>

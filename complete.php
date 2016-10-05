@@ -67,6 +67,7 @@ function validate_form( ) {
         $errors[] = 'Please enter your name.';
     }
 
+
     //begin email
     if (isset($_POST['email'])) {
         $input['email'] = trim($_POST['email']);
